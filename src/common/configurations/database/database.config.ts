@@ -12,7 +12,7 @@ export const defaultDatabaseConfig: TypeOrmModuleAsyncOptions = {
     database: configService.getOrThrow('database.name', { infer: true }),
     entities: ['src/**/*.entity.js'],
     autoLoadEntities: true,
-    synchronize: false,
+    synchronize: true,
   }),
   imports: [ConfigModule],
   inject: [ConfigService],
