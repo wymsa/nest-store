@@ -4,16 +4,20 @@ import { UserEntity } from './entity/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create.dto';
 import { UpdateUserDto } from './dtos/update.dto';
+import { HashingService } from 'src/hashing/hashing.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly hashingService: HashingService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const newUser = this.userRepository.create(createUserDto);
+    newUser.password = await this.hashingService.hash(newUser.password);
+
     return await this.userRepository.save(newUser);
   }
 
@@ -33,6 +37,13 @@ export class UsersService {
     });
 
     if (!foundUser) throw new NotFoundException('User not found');
+
+    const isPasswordChanging = Object.keys(updateUserDto).includes('password');
+    if (isPasswordChanging) {
+      updateUserDto.password = await this.hashingService.hash(
+        updateUserDto.password,
+      );
+    }
 
     return await this.userRepository.save({ ...foundUser, ...updateUserDto });
   }
