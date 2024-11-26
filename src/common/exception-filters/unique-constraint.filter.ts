@@ -14,15 +14,24 @@ export class UniqueConstraintFilter implements ExceptionFilter {
     const request = context.getRequest<Request>();
     const response = context.getResponse<Response>();
 
+    const errorCode = (exception as any).code;
     const errorDetails = (exception as any).detail;
     const errorTarget = this.getErrorTarget(errorDetails);
 
-    response.status(HttpStatus.CONFLICT).json({
-      message: `Resource with value | ${errorTarget?.value} | already exists`,
-      target: errorTarget?.value,
-      path: request.url,
-      timestamp: new Date().toLocaleString(),
-    });
+    if (errorCode === '23505') {
+      response.status(HttpStatus.CONFLICT).json({
+        message: `Resource with value | ${errorTarget?.value} | already exists`,
+        target: errorTarget?.value,
+        path: request.url,
+        timestamp: new Date().toLocaleString(),
+      });
+    } else {
+      response.status(500).json({
+        message: exception.message,
+        path: request.url,
+        timestamp: new Date().toLocaleString(),
+      });
+    }
   }
 
   private getErrorTarget(errorDetails: string) {
