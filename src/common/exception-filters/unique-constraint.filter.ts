@@ -1,42 +1,7 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpStatus,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
-import { QueryFailedError } from 'typeorm';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 
-@Catch(QueryFailedError)
 export class UniqueConstraintFilter implements ExceptionFilter {
-  catch(exception: QueryFailedError, host: ArgumentsHost) {
-    const context = host.switchToHttp();
-    const request = context.getRequest<Request>();
-    const response = context.getResponse<Response>();
-
-    const errorCode = (exception as any).code;
-    const errorDetails = (exception as any).detail;
-    const errorTarget = this.getErrorTarget(errorDetails);
-
-    if (errorCode === '23505') {
-      response.status(HttpStatus.CONFLICT).json({
-        message: `Resource with value | ${errorTarget?.value} | already exists`,
-        target: errorTarget?.value,
-        path: request.url,
-        timestamp: new Date().toLocaleString(),
-      });
-    } else {
-      response.status(500).json({
-        message: exception.message,
-        path: request.url,
-        timestamp: new Date().toLocaleString(),
-      });
-    }
-  }
-
-  private getErrorTarget(errorDetails: string) {
-    const match = errorDetails.match(/\((.+?)\)=\((.+?)\)/);
-
-    return match ? { data: match[0], field: match[1], value: match[2] } : null;
+  catch(exception: any, host: ArgumentsHost) {
+    throw new Error('Method not implemented.');
   }
 }

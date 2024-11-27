@@ -9,15 +9,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/create.dto';
-import { UpdateUserDto } from './dtos/update.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('/')
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: any) {
     return await this.usersService.create(createUserDto);
   }
 
@@ -29,7 +27,7 @@ export class UsersController {
   @Patch('/:id')
   async update(
     @Param('id', ParseIntPipe) userId: number,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: any,
   ) {
     return await this.usersService.update(userId, updateUserDto);
   }
