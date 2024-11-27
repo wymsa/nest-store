@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
-import { UniqueConstraintFilter } from './common/exception-filters/unique-constraint.filter';
+import { PrismaExceptionFilter } from './common/exception-filters/prisma-exception.filter';
 import { NotFoundExceptionFilter } from './common/exception-filters/not-found.filter';
 
 async function bootstrap() {
@@ -10,9 +10,15 @@ async function bootstrap() {
 
   app.use(helmet());
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   app.useGlobalFilters(
-    new UniqueConstraintFilter(),
+    new PrismaExceptionFilter(),
     new NotFoundExceptionFilter(),
   );
 

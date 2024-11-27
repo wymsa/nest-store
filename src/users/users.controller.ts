@@ -9,13 +9,14 @@ import {
   Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto, UpdateUserDto } from './dtos';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('/')
-  async create(@Body() createUserDto: any) {
+  async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
 
@@ -27,7 +28,7 @@ export class UsersController {
   @Patch('/:id')
   async update(
     @Param('id', ParseIntPipe) userId: number,
-    @Body() updateUserDto: any,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
     return await this.usersService.update(userId, updateUserDto);
   }
@@ -37,13 +38,8 @@ export class UsersController {
     return await this.usersService.getAll();
   }
 
-  @Get('/id/:id')
-  async getOneById(@Param('id', ParseIntPipe) userId: number) {
-    return await this.usersService.getOneById(userId);
-  }
-
-  @Get('/email/:email')
-  async getOneByEmail(@Param('email') userEmail: string) {
-    return await this.usersService.getOneByEmail(userEmail);
+  @Get('/:id')
+  async getOne(@Param('id', ParseIntPipe) userId: number) {
+    return await this.usersService.getOne(userId);
   }
 }

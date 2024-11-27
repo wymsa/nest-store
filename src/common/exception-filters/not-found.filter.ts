@@ -18,7 +18,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
 
     response.status(HttpStatus.NOT_FOUND).json({
       message: errorMessage,
-      path: request.url,
+      path: `${request.method} -|- ${request.url}`,
       timestamp: new Date().toLocaleString(),
     });
   }
