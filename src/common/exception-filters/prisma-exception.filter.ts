@@ -29,7 +29,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       }
       case 'P2025': {
         statusCode = HttpStatus.NOT_FOUND;
-        errorMessage = 'Resource not found';
+        errorMessage = 'Resource not found dsadasdas';
         break;
       }
       default: {

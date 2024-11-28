@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { HashingService } from 'src/hashing/hashing.service';
 import { CreateUserDto, UpdateUserDto } from './dtos';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly databaseService: DatabaseService,
+    private readonly prismaService: PrismaService,
     private readonly hashingService: HashingService,
   ) {}
 
@@ -15,16 +15,20 @@ export class UsersService {
       createUserDto.password,
     );
 
-    return await this.databaseService.user.create({
+    return await this.prismaService.user.create({
       data: {
         ...createUserDto,
         password: hashedPassword,
       },
+      select: { id: true, email: true, password: false },
     });
   }
 
   async remove(userId: number) {
-    return await this.databaseService.user.delete({ where: { id: userId } });
+    return await this.prismaService.user.delete({
+      where: { id: userId },
+      select: { id: true, email: true, password: false },
+    });
   }
 
   async update(userId: number, updateUserDto: UpdateUserDto) {
@@ -36,19 +40,23 @@ export class UsersService {
       );
     }
 
-    return await this.databaseService.user.update({
+    return await this.prismaService.user.update({
       where: { id: userId },
       data: updateUserDto,
+      select: { id: true, email: true, password: false },
     });
   }
 
   async getAll() {
-    return await this.databaseService.user.findMany();
+    return await this.prismaService.user.findMany({
+      select: { id: true, email: true, password: false },
+    });
   }
 
   async getOne(userId: number) {
-    return await this.databaseService.user.findUniqueOrThrow({
+    return await this.prismaService.user.findUniqueOrThrow({
       where: { id: userId },
+      select: { id: true, email: true, password: false },
     });
   }
 }
