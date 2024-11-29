@@ -27,9 +27,14 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         errorMessage = 'Resource already exists';
         break;
       }
+      case 'P2003': {
+        statusCode = HttpStatus.NOT_FOUND;
+        errorMessage = 'Relation resource not found or already in use';
+        break;
+      }
       case 'P2025': {
         statusCode = HttpStatus.NOT_FOUND;
-        errorMessage = 'Resource not found dsadasdas';
+        errorMessage = 'Resource not found';
         break;
       }
       default: {
