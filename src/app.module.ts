@@ -2,17 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { defaultEnvConfig } from './common/configurations/env/env.config';
 import { UsersModule } from './users/users.module';
-import { PrismaModule } from './prisma/prisma.module';
 import { RolesModule } from './roles/roles.module';
+import { PrismaService } from './common/services/prisma.service';
+import { HashingService } from './common/services/hashing.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(defaultEnvConfig),
-    UsersModule,
-    PrismaModule,
-    RolesModule,
-  ],
+  imports: [ConfigModule.forRoot(defaultEnvConfig), UsersModule, RolesModule],
   controllers: [],
-  providers: [],
+  providers: [PrismaService, HashingService],
 })
 export class AppModule {}

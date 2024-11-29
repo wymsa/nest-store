@@ -6,9 +6,10 @@ import { PrismaExceptionFilter } from './common/exception-filters/prisma-excepti
 import { NotFoundExceptionFilter } from './common/exception-filters/not-found.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.use(helmet());
+  app.setGlobalPrefix('api');
 
   app.useGlobalPipes(
     new ValidationPipe({
