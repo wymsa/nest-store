@@ -1,9 +1,6 @@
-import { Prisma } from '@prisma/client';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateUserDto
-  implements Omit<Prisma.UserCreateInput, 'createAt, updatedAt'>
-{
+export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -11,4 +8,8 @@ export class CreateUserDto
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  roleId: number;
 }

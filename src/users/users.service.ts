@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dtos';
 import { PrismaService } from 'src/common/services/prisma.service';
 import { HashingService } from 'src/common/services/hashing.service';
+import { userWithRoleSelect } from './prisma/users.select';
 
 @Injectable()
 export class UsersService {
@@ -20,14 +21,14 @@ export class UsersService {
         ...createUserDto,
         password: hashedPassword,
       },
-      select: { id: true, email: true, password: false },
+      select: userWithRoleSelect,
     });
   }
 
   async remove(userId: number) {
     return await this.prismaService.user.delete({
-      where: { id: userId },
-      select: { id: true, email: true, password: false },
+      where: { id: +userId },
+      select: userWithRoleSelect,
     });
   }
 
@@ -41,22 +42,22 @@ export class UsersService {
     }
 
     return await this.prismaService.user.update({
-      where: { id: userId },
+      where: { id: +userId },
       data: updateUserDto,
-      select: { id: true, email: true, password: false },
+      select: userWithRoleSelect,
     });
   }
 
   async getAll() {
     return await this.prismaService.user.findMany({
-      select: { id: true, email: true, password: false },
+      select: userWithRoleSelect,
     });
   }
 
   async getOne(userId: number) {
     return await this.prismaService.user.findUniqueOrThrow({
-      where: { id: userId },
-      select: { id: true, email: true, password: false },
+      where: { id: +userId },
+      select: userWithRoleSelect,
     });
   }
 }
