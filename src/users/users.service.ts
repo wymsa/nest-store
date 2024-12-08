@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './dtos';
-import { PrismaService } from 'src/common/services/prisma.service';
-import { HashingService } from 'src/common/services/hashing.service';
-import { userWithRoleSelect } from './prisma/users.select';
+import { Injectable } from "@nestjs/common";
+import { CreateUserDto, UpdateUserDto } from "./dtos";
+import { PrismaService } from "src/common/services/prisma.service";
+import { HashingService } from "src/common/services/hashing.service";
+import {
+  userWithRoleAndPasswordSelect,
+  userWithRoleSelect,
+} from "./prisma/users.select";
 
 @Injectable()
 export class UsersService {
@@ -33,7 +36,7 @@ export class UsersService {
   }
 
   async update(userId: number, updateUserDto: UpdateUserDto) {
-    const isPasswordUpdating = Object.keys(updateUserDto).includes('password');
+    const isPasswordUpdating = Object.keys(updateUserDto).includes("password");
 
     if (isPasswordUpdating) {
       updateUserDto.password = await this.hashingService.hash(
@@ -58,6 +61,13 @@ export class UsersService {
     return await this.prismaService.user.findUniqueOrThrow({
       where: { id: +userId },
       select: userWithRoleSelect,
+    });
+  }
+
+  async getOneByEmail(email: string) {
+    return await this.prismaService.user.findUniqueOrThrow({
+      where: { email: email },
+      select: userWithRoleAndPasswordSelect,
     });
   }
 }

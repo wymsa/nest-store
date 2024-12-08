@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
 export const userDefaultSelect: Prisma.UserSelect = {
   id: true,
@@ -12,4 +12,9 @@ export const userWithRoleSelect: Prisma.UserSelect = {
       name: true,
     },
   },
+};
+
+export const userWithRoleAndPasswordSelect: Prisma.UserSelect = {
+  ...userWithRoleSelect,
+  password: true,
 };
