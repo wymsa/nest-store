@@ -19,8 +19,6 @@ export const Cookies = createParamDecorator(
       },
       {} as Record<string, string>,
     );
-
-    console.log(filteredCookies);
     return filteredCookies;
   },
 );
