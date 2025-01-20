@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RolesModule } from './roles/roles.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -17,14 +16,12 @@ import configuration from './config/configuration';
         return {
           type: 'postgres',
           url: configService.getOrThrow('database.url'),
-          migrations: [__dirname + '/database/migrations/*.ts'],
           autoLoadEntities: true,
         };
       },
       inject: [ConfigService],
     }),
+    RolesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
