@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from './entities/role.entity';
-import { Repository } from 'typeorm';
+import { RoleEntity } from './entities/role.entity';
+import { In, Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
-  constructor(@InjectRepository(Role) private readonly rolesRepository: Repository<Role>) {}
+  constructor(@InjectRepository(RoleEntity) private readonly rolesRepository: Repository<RoleEntity>) {}
 
   async create(createRoleDto: CreateRoleDto) {
     const newRole = this.rolesRepository.create(createRoleDto);
@@ -25,8 +25,19 @@ export class RolesService {
   }
 
   async getOne(roleId: number) {
-    await this.findRoleById(roleId);
-    return await this.rolesRepository.findOne({ where: { id: roleId } });
+    return await this.findRoleById(roleId);
+  }
+
+  async getMany(roleIds: number[]) {
+    const [foundRoles, foundRolesCount] = await this.rolesRepository.findAndCount({ where: { id: In(roleIds) } });
+    const foundRoleIds = foundRoles.map((foundRole) => foundRole.id);
+    const notFoundRoles = roleIds.filter((role) => !foundRoleIds.includes(role));
+
+    if (roleIds.length !== foundRolesCount && notFoundRoles.length > 0) {
+      throw new NotFoundException(`Role by IDs = ${notFoundRoles.join(', ')} not found`);
+    }
+
+    return await this.rolesRepository.findAndCount({ where: { id: In(roleIds) } });
   }
 
   async getAll() {

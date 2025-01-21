@@ -22,7 +22,7 @@ module.exports = {
       'warn',
       {
         endOfLine: 'auto',
-        printWidth: 240,
+        printWidth: 140,
       },
     ],
   },
