@@ -28,7 +28,7 @@ export class RolesService {
     return await this.findRoleById(roleId);
   }
 
-  async getMany(roleIds: number[]) {
+  async getMany(roleIds: number[]): Promise<[RoleEntity[], number]> {
     const [foundRoles, foundRolesCount] = await this.rolesRepository.findAndCount({ where: { id: In(roleIds) } });
     const foundRoleIds = foundRoles.map((foundRole) => foundRole.id);
     const notFoundRoles = roleIds.filter((role) => !foundRoleIds.includes(role));
@@ -37,7 +37,7 @@ export class RolesService {
       throw new NotFoundException(`Role by IDs = ${notFoundRoles.join(', ')} not found`);
     }
 
-    return await this.rolesRepository.findAndCount({ where: { id: In(roleIds) } });
+    return [foundRoles, foundRolesCount];
   }
 
   async getAll() {
@@ -47,6 +47,6 @@ export class RolesService {
   private async findRoleById(roleId: number) {
     const foundRole = await this.rolesRepository.findOne({ where: { id: roleId } });
     if (!foundRole) throw new NotFoundException(`Role by ID = ${roleId} not found`);
-    return await this.rolesRepository.findOne({ where: { id: roleId } });
+    return foundRole;
   }
 }
