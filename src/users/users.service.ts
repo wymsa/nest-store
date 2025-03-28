@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { UpdateUserDTO, UserDTO } from './dtos/user.dto';
-import { PartialType } from '@nestjs/mapped-types';
 
 import { hash } from 'bcrypt';
 
