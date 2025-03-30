@@ -3,7 +3,8 @@ import { UsersService } from 'src/users/users.service';
 
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, PrismaUser } from './types';
+import { JwtPayload } from './types';
+import { PrismaUser } from 'src/users/types';
 
 @Injectable()
 export class AuthService {
