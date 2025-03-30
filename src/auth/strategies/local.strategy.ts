@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(LocalPassportStrategy) {
   }
 
   async validate(userEmail: string, userPassword: string): Promise<PrismaUser> {
-    const foundUser = await this.authService.validateUserLocal(
+    const foundUser = await this.authService.validateUser(
       userEmail,
       userPassword
     );
