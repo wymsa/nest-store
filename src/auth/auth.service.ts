@@ -13,15 +13,9 @@ export class AuthService {
   ) {}
 
   async validateUser(userEmail: string): Promise<PrismaUser | null>;
-  async validateUser(
-    userEmail: string,
-    userPassword: string
-  ): Promise<PrismaUser | null>;
+  async validateUser(userEmail: string, userPassword: string): Promise<PrismaUser | null>;
 
-  async validateUser(
-    userEmail: string,
-    userPassword?: string
-  ): Promise<PrismaUser | null> {
+  async validateUser(userEmail: string, userPassword?: string): Promise<PrismaUser | null> {
     const foundUser = await this.usersService.getOneByEmail(userEmail);
 
     if (!foundUser) return null;
