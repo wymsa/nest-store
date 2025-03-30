@@ -26,10 +26,7 @@ export class UsersController {
 
   @Patch(':userID')
   @HttpCode(HttpStatus.OK)
-  async update(
-    @Param('userID', ParseIntPipe) userID: number,
-    @Body() updateUserDto: UpdateUserDTO
-  ) {
+  async update(@Param('userID', ParseIntPipe) userID: number, @Body() updateUserDto: UpdateUserDTO) {
     return await this.usersService.update(userID, updateUserDto);
   }
 
