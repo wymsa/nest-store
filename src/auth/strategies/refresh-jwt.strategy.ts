@@ -1,16 +1,14 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy as JwtPassportStrategy } from 'passport-jwt';
-import { JwtPayload, PrismaUser } from '../types';
+import { JwtPayload } from '../types';
 import { refreshFromCookieExtractor } from '../extractors/refresh-from-cookie.extractor';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
+import { PrismaUser } from 'src/users/types';
 
 @Injectable()
-export class RefreshJwtStrategy extends PassportStrategy(
-  JwtPassportStrategy,
-  'refresh-jwt'
-) {
+export class RefreshJwtStrategy extends PassportStrategy(JwtPassportStrategy, 'refresh-jwt') {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService
