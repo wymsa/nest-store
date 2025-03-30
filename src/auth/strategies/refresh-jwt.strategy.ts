@@ -31,6 +31,6 @@ export class RefreshJwtStrategy extends PassportStrategy(
       throw new UnauthorizedException();
     }
 
-    return { ...foundUser };
+    return foundUser;
   }
 }
