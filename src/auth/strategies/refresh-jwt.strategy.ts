@@ -4,7 +4,6 @@ import { JwtPayload, PrismaUser } from '../types';
 import { refreshFromCookieExtractor } from '../extractors/refresh-from-cookie.extractor';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Request } from 'express';
 import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -24,7 +23,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: JwtPayload): Promise<PrismaUser> {
-    const foundUser = await this.authService.validateUserEmail(payload.email);
+    const foundUser = await this.authService.validateUser(payload.email);
 
     console.log(payload);
 
