@@ -12,29 +12,28 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUserLocal(
+  async validateUser(userEmail: string): Promise<PrismaUser | null>;
+  async validateUser(
     userEmail: string,
     userPassword: string
+  ): Promise<PrismaUser | null>;
+
+  async validateUser(
+    userEmail: string,
+    userPassword?: string
   ): Promise<PrismaUser | null> {
     const foundUser = await this.usersService.getOneByEmail(userEmail);
 
-    if (foundUser && (await compare(userPassword, foundUser.password))) {
-      const { password, ...restFoundUser } = foundUser;
-      return restFoundUser;
+    if (!foundUser) return null;
+
+    if (userPassword) {
+      const isValidPassword = await compare(userPassword, foundUser.password);
+
+      if (!isValidPassword) return null;
     }
 
-    return null;
-  }
-
-  async validateUserEmail(userEmail: string): Promise<PrismaUser | null> {
-    const foundUser = await this.usersService.getOneByEmail(userEmail);
-
-    if (foundUser) {
-      const { password, ...restFoundUser } = foundUser;
-      return restFoundUser;
-    }
-
-    return null;
+    const { password, ...restFoundUser } = foundUser;
+    return restFoundUser;
   }
 
   async login(user: PrismaUser) {
