@@ -7,7 +7,7 @@ import { JwtPayload } from '../types';
 import { PrismaUser } from 'src/users/types';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(JwtPassportStrategy) {
+export class JwtStrategy extends PassportStrategy(JwtPassportStrategy, 'jwt') {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService
