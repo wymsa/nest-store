@@ -54,6 +54,12 @@ export class UsersController {
   @Get('email/:userEmail')
   @HttpCode(HttpStatus.OK)
   async getOneByEmail(@Param('userEmail') userEmail: string) {
-    return await this.usersService.getOneByEmail(userEmail);
+    const foundUser = await this.usersService.getOneByEmail(userEmail);
+
+    if (!foundUser) return null;
+
+    const { password, ...restFoundUser } = foundUser;
+
+    return restFoundUser;
   }
 }
