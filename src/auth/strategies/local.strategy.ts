@@ -5,7 +5,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaUser } from 'src/users/types';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(LocalPassportStrategy) {
+export class LocalStrategy extends PassportStrategy(LocalPassportStrategy, 'local') {
   constructor(private readonly authService: AuthService) {
     super({
       session: false,
