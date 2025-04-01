@@ -3,6 +3,7 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { UpdateUserDTO, UserDTO } from './dtos/user.dto';
 
 import { hash } from 'bcrypt';
+import { defaultUserSelector, withPasswordUserSelector } from './selectors';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,8 @@ export class UsersService {
     const hashedPassword = await hash(createUserDto.password, 12);
 
     return this.prismaService.user.create({
-      data: { ...createUserDto, password: hashedPassword }
+      data: { ...createUserDto, password: hashedPassword },
+      select: defaultUserSelector
     });
   }
 
@@ -25,23 +27,27 @@ export class UsersService {
 
     return this.prismaService.user.update({
       data: { ...updateUserDto, password: hashedPassword },
-      where: { id: userID }
+      where: { id: userID },
+      select: defaultUserSelector
     });
   }
 
   async delete(userID: number) {
-    return this.prismaService.user.delete({ where: { id: userID } });
+    return this.prismaService.user.delete({ where: { id: userID }, select: defaultUserSelector });
   }
 
   async getAll(take?: number, skip?: number) {
-    return this.prismaService.user.findMany({ take, skip });
+    return this.prismaService.user.findMany({ take, skip, select: defaultUserSelector });
   }
 
   async getOneByID(userID: number) {
-    return this.prismaService.user.findUnique({ where: { id: userID } });
+    return this.prismaService.user.findUnique({ where: { id: userID }, select: defaultUserSelector });
   }
 
   async getOneByEmail(userEmail: string) {
-    return this.prismaService.user.findUnique({ where: { email: userEmail } });
+    return this.prismaService.user.findUnique({
+      where: { email: userEmail },
+      select: withPasswordUserSelector
+    });
   }
 }
