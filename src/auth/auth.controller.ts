@@ -1,9 +1,10 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Request, Response } from 'express';
-import { PrismaUser } from 'src/users/types';
+import { Response } from 'express';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { RequiredRoles } from 'src/common/decorators/required-roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,8 @@ export class AuthController {
     return accessToken;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @RequiredRoles('ADMIN')
   @Get('profile')
   @HttpCode(HttpStatus.OK)
   async profile(@CurrentUser() currentUser: Express.User) {
