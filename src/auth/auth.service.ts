@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async login(user: PrismaUser) {
-    const payload = { email: user.email, sub: user.id } as JwtPayload;
+    const payload = { email: user.email, sub: user.id, role: user.role } as JwtPayload;
 
     return await this.issueTokens(payload);
   }
