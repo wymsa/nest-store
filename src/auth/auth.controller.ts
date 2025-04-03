@@ -1,14 +1,21 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { RequiredRoles } from 'src/common/decorators/required-roles.decorator';
+import { SignUpDTO } from './dtos/sign-up.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post('signup')
+  async signUp(@Body() signUpDto: SignUpDTO) {
+    return await this.authService.signUp(signUpDto);
+  }
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
