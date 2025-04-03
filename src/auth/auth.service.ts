@@ -5,6 +5,7 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types';
 import { PrismaUser } from 'src/users/types';
+import { SignUpDTO } from './dtos/sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +36,10 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id, role: user.role } as JwtPayload;
 
     return await this.issueTokens(payload);
+  }
+
+  async signUp(signUpDto: SignUpDTO) {
+    return this.usersService.create(signUpDto);
   }
 
   private async issueTokens(payload: JwtPayload) {
