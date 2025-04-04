@@ -1,9 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpStatus
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Request, Response } from 'express';
 
@@ -28,6 +23,8 @@ export class PrismaKnownExceptionFilter implements ExceptionFilter {
           message: `Record '[${exception.meta?.modelName}]' already exists`,
           timestamp: new Date().toISOString()
         };
+
+        break;
       }
 
       case 'P2025': {
@@ -37,13 +34,12 @@ export class PrismaKnownExceptionFilter implements ExceptionFilter {
           message: `Record '[${exception.meta?.modelName}]' does not exists`,
           timestamp: new Date().toISOString()
         };
+
+        break;
       }
     }
 
-    console.error(
-      `PrismaKnownExceptionFilter |`,
-      JSON.parse(JSON.stringify(exception))
-    );
+    console.error(`PrismaKnownExceptionFilter |`, JSON.parse(JSON.stringify(exception)));
 
     response.status(responseBody.statusCode).send(responseBody);
   }
