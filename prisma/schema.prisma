@@ -15,7 +15,24 @@ model Category {
   name String @unique
   slug String @unique
 
+  products Product[]
+
   @@map("categories")
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title String @unique
+  slug  String @unique
+  image String
+
+  category   Category @relation(fields: [categoryID], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  categoryID Int      @map("category_id")
+
+  @@map("products")
 }
 
 model User {

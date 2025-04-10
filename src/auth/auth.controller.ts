@@ -6,6 +6,7 @@ import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { RequiredRoles } from 'src/common/decorators/required-roles.decorator';
 import { SignUpDTO } from './dtos/sign-up.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +32,7 @@ export class AuthController {
     return accessToken;
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @RequiredRoles('ADMIN')
   @Get('profile')
   @HttpCode(HttpStatus.OK)

@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(compression({ threshold: 1000 }));
   app.enableCors({ origin: [configService.get<string>('FRONTEND_URL')], credentials: true });
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false, transform: true }));
   app.useGlobalFilters(new PrismaKnownExceptionFilter());
   await app.listen(configService.getOrThrow<number>('PORT'));
 }

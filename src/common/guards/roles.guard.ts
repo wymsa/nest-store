@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { REQUIRED_ROLES_KEY } from '../decorators/required-roles.decorator';
 import { Role } from '@prisma/client';
+import { PUBLIC_ROUTE_KEY } from '../decorators/public-router.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -14,7 +15,9 @@ export class RolesGuard implements CanActivate {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(REQUIRED_ROLES_KEY, [
       context.getHandler()
     ]);
+    const isPublicRoute = this.reflector.getAllAndOverride(PUBLIC_ROUTE_KEY, [context.getHandler()]);
 
+    if (isPublicRoute) return true;
     if (!requiredRoles) return true;
     if (!request.user) return false;
 
