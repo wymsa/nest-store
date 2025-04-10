@@ -31,7 +31,7 @@ export class PrismaKnownExceptionFilter implements ExceptionFilter {
         responseBody = {
           statusCode: HttpStatus.BAD_REQUEST,
           path: `${request.path} | ${request.method}`,
-          message: `Record '[${exception.meta?.modelName}]' does not exists`,
+          message: `Record '[${exception.meta?.modelName}]' or relation record does not exists`,
           timestamp: new Date().toISOString()
         };
 
