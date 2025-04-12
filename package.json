@@ -1,10 +1,10 @@
 {
   "name": "nest-store",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "REST API for an online store",
+  "author": "Anton Poliaiev <wymsa.email@gmail.com>",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
